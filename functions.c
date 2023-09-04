@@ -1,22 +1,38 @@
 #include "monty.h"
+/**
+*
+*/
+void push_func(char **tokens, stack_t **stack, unsigned int line_number __attribute__((unused)))
+{
+    stack_t *newnode = malloc(sizeof(stack_t));
+    stack_t *same = *stack;
 
+    newnode->n = atoi(tokens[1]);
+    newnode->prev = NULL;
+    if (!same)
+    {
+        newnode->next = NULL;
+    }
+    else
+    {
+        newnode->next = same;    
+    }
+    *stack = newnode;
+}
 /**
 *
 */
 void pall_func(stack_t **stack, unsigned int line_number __attribute__((unused)))
 {
     stack_t *tmp = *stack;
-    if (!*stack)
-        exit(EXIT_FAILURE);
-    else
+
+    while (tmp)
     {
-        while (tmp)
-        {
-            printf("%d\n", tmp->n);
-            tmp = tmp->next;
-        }
+        printf("%d\n", tmp->n);
+        tmp = tmp->next;    
     }
 }
+
 /*
 *
 */
@@ -99,12 +115,4 @@ void add_func(stack_t **stack, unsigned int line_number)
         *stack = aux;
         free(aux);
     }
-}
-
-/**
-*
-*/
-void nop_func(stack_t **stack __attribute__((unused)), unsigned int line_number __attribute__((unused)))
-{
-    
 }

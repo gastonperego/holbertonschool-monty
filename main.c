@@ -5,10 +5,10 @@
 int main(int argc, char *argv[])
 {
     unsigned int line_number = 0;
+    int exit_sta = EXIT_SUCCESS;
     FILE *fp = NULL;
     size_t n = 0;
-    ssize_t got;
-    char *buf = NULL, **tokens = NULL;
+    char *buf = NULL, **tokens;
     stack_t *stack;
 
     if (argc != 2)
@@ -22,32 +22,32 @@ int main(int argc, char *argv[])
         dprintf(STDERR_FILENO, "Error: Can't open file %s\n", argv[1]);
         exit(EXIT_FAILURE);
     }
-    while (1)
+    while (getline(&buf, &n, fp) != -1)
     {
-        got = getline(&buf, &n, fp);
-        if (got == -1)
-            exit(EXIT_FAILURE);
         line_number++;
 
         tokens = tokenizer(buf, " \n\t$");
         if (strcmp(tokens[0], "push") == 0)
         {
             push_func(tokens, &stack, line_number);
-            printf("%s\n", tokens[1]);
+        }
+        else if (strcmp(tokens[0], "nop") == 0)
+        {
+            free_dp(tokens);
+            continue;
         }
         else
         {
-            choose_func(tokens, line_number)(&stack, line_number);
-            break;
+            exit_sta = choose_func(tokens, &stack, line_number);
         }
     }
     fclose(fp);
-    return(0);
+    return(exit_sta);
 }
 /**
 *
 */
-void (*choose_func(char **tokens, unsigned int line_number))(stack_t **stack, unsigned int line_number)
+int choose_func(char **tokens, stack_t **stack, unsigned int line_number)
 {
     int i = 0;
     instruction_t func_selector[] = {
@@ -56,26 +56,21 @@ void (*choose_func(char **tokens, unsigned int line_number))(stack_t **stack, un
         {"pop", pop_func},
         {"swap", swap_func},
         {"add", add_func},
-        {"nop", nop_func},
         {NULL, NULL},
     };
 
-    while (i < 7 && strcmp(tokens[0],func_selector[i].opcode) != 0)
+    for (;i < 6 && strcmp(tokens[0],func_selector[i].opcode) == 0; i++)
     {
-            i++;
+            func_selector[i].f(stack, line_number);
+            return(EXIT_SUCCESS);
     }
-    if (func_selector[i].opcode == NULL)
-    {
-        dprintf(STDERR_FILENO,"L%d: unknown instruction %s\n", line_number, tokens[0]);
-        exit(EXIT_FAILURE);
-    }
-    else
-        return(func_selector[i].f);
-    return(0);
+    free_stack(stack);
+	fprintf(stderr, "L%i: unknown instruction %s\n", line_number, tokens[0]);
+	return (EXIT_FAILURE);
 }
 
 /*
-* tokening - makes tokens from the input string
+* tokenizer - makes tokens from the input string
 *
 * @input: input string from getline
 * @delim: delimiter to separate the tokens
@@ -146,4 +141,17 @@ void free_dp(char **command)
 	if (command[i] == NULL)
 		free(command[i]);
 	free(command);
+}
+void free_stack(stack_t **stack)
+{
+	stack_t *aux = *stack;
+
+	if (*stack == NULL)
+		return;
+	while (*stack)
+	{
+		aux = (*stack)->next;
+		free(*stack);
+		*stack = aux;
+	}
 }
