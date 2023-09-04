@@ -5,7 +5,7 @@
 int main(int argc, char *argv[])
 {
     unsigned int line_number = 0;
-    int exit_sta = EXIT_SUCCESS;
+    int exit_sta = EXIT_SUCCESS, k = 0;
     FILE *fp = NULL;
     size_t n = 0;
     char *buf = NULL, **tokens;
@@ -25,12 +25,24 @@ int main(int argc, char *argv[])
     while (getline(&buf, &n, fp) != -1)
     {
         line_number++;
-
+        if (del_only(buf) == '\0')
+            continue;
         tokens = tokenizer(buf, " \n\t$");
         if (strcmp(tokens[0], "push") == 0)
         {
-            push_func(tokens, &stack, line_number);
-            free_dp(tokens);
+            while (tokens[k] != NULL)
+            {
+                k++;
+            }
+            if (k < 2)
+            {
+                fprintf(stderr, "L%u: usage: push integer\n", line_number);
+		        exit(EXIT_FAILURE);
+            }
+            else {
+                push_func(tokens, &stack, line_number);
+                free_dp(tokens);
+            }
         }
         else if (strcmp(tokens[0], "nop") == 0)
         {
@@ -157,4 +169,33 @@ void free_stack(stack_t **stack)
 		free(*stack);
 		*stack = aux;
 	}
+}
+/**
+ * del_only - checks if the line only contains delimiters.
+ * 
+ * @line: the pointer to the line.
+ * @delims: string with delimiter characters.
+ * 
+ * Return: 1 if the line only contains delimiters, otherwise 0.
+ */
+int del_only(char *line)
+{
+	int i = 0, j = 0, k = 0, l = 0, m = 0;
+    while (line[i])
+    {
+        if (line[i] == ' ')
+            j++;
+        else if (line[i] == '\n')
+            k++;
+        else if (line[i] == '\t')
+            l++;
+        else if (line[i] == '$')
+            m++;
+        i++;
+    }
+    if ((strlen(line) - (j + k + l + m)) == 0)
+    {
+        return('\0');
+    }
+	return (1);
 }

@@ -48,4 +48,5 @@ void add_func(stack_t **stack, unsigned int line_number);
 void nop_func(stack_t **stack, unsigned int line_number);
 char **tokenizer(char *input, char *delim);
 void free_dp(char **command);
+int del_only(char *line);
 #endif

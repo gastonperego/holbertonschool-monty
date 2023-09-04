@@ -8,6 +8,7 @@ void push_func(char **tokens, stack_t **stack, unsigned int line_number __attrib
     stack_t *same = *stack;
     int i;
 
+    /*printf("Entra al if\n");*/
     newnode = malloc(sizeof(stack_t));
     if (newnode == NULL)
     {
