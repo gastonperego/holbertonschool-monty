@@ -8,32 +8,41 @@ void push_func(char **tokens, stack_t **stack, unsigned int line_number __attrib
     stack_t *same = *stack;
     int i;
 
-    /*printf("Entra al if\n");*/
+    printf("Entra a push\n");
     newnode = malloc(sizeof(stack_t));
     if (newnode == NULL)
     {
         fprintf(stderr, "Error: malloc failed\n");
 		exit(EXIT_FAILURE);
     }
-    for (i = 0; tokens[1][i] != '\0'; i++)
-	{
-		if (!isdigit(tokens[1][i]) && tokens[1][i] != '-')
-		{
-			fprintf(stderr, "L%u: usage: push integer\n", line_number);
-			exit(EXIT_FAILURE);
-		}
-	}
-    newnode->n = atoi(tokens[1]);
-    newnode->prev = NULL;
-    if (!same)
+    if (tokens[1] != NULL)
     {
-        newnode->next = NULL;
+        for (i = 0; tokens[1][i] != '\0'; i++)
+	    {
+		    if (!isdigit(tokens[1][i]) && tokens[1][i] != '-')
+		    {
+			    fprintf(stderr, "L%u: usage: push integer\n", line_number);
+			    exit(EXIT_FAILURE);
+		    }
+	    }
+        newnode->n = atoi(tokens[1]);
+        newnode->prev = NULL;
+        if (!same)
+        {
+            newnode->next = NULL;
+        }
+        else
+        {
+            newnode->next = same;    
+        }
+        *stack = newnode;
     }
     else
     {
-        newnode->next = same;    
+        free(newnode);
+        fprintf(stderr, "L%u: usage: push integer\n", line_number);
+		exit(EXIT_FAILURE);
     }
-    *stack = newnode;
     /*free(newnode);*/
 }
 

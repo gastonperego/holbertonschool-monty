@@ -5,7 +5,7 @@
 int main(int argc, char *argv[])
 {
     unsigned int line_number = 0;
-    int exit_sta = EXIT_SUCCESS, k = 0;
+    int exit_sta = EXIT_SUCCESS;
     FILE *fp = NULL;
     size_t n = 0;
     char *buf = NULL, **tokens;
@@ -30,19 +30,8 @@ int main(int argc, char *argv[])
         tokens = tokenizer(buf, " \n\t$");
         if (strcmp(tokens[0], "push") == 0)
         {
-            while (tokens[k] != NULL)
-            {
-                k++;
-            }
-            if (k < 2)
-            {
-                fprintf(stderr, "L%u: usage: push integer\n", line_number);
-		        exit(EXIT_FAILURE);
-            }
-            else {
                 push_func(tokens, &stack, line_number);
                 free_dp(tokens);
-            }
         }
         else if (strcmp(tokens[0], "nop") == 0)
         {
