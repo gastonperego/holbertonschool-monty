@@ -30,6 +30,7 @@ int main(int argc, char *argv[])
         if (strcmp(tokens[0], "push") == 0)
         {
             push_func(tokens, &stack, line_number);
+            free_dp(tokens);
         }
         else if (strcmp(tokens[0], "nop") == 0)
         {
@@ -39,8 +40,10 @@ int main(int argc, char *argv[])
         else
         {
             exit_sta = choose_func(tokens, &stack, line_number);
+            free_dp(tokens);
         }
     }
+    free(buf);
     fclose(fp);
     return(exit_sta);
 }
@@ -83,7 +86,7 @@ char **tokenizer(char *input, char *delim)
     char *input_copy, *token, **av;
     int count = 0, i = 0;
 
-    input_copy = strdup(input); /*FREE INPUT COPY MANEJADO*/
+    input_copy = strdup(input);
 	if (input_copy == NULL)
     {
 		free(input_copy);
