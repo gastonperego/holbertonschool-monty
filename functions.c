@@ -90,8 +90,8 @@ void pop_func(stack_t **stack, unsigned int line_number)
     else
     {
         aux = (*stack)->next;
+        free((*stack));
         (*stack) = aux;
-        free(aux);
     }
 }
 /**
