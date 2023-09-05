@@ -36,7 +36,8 @@ int main(int argc, char *argv[])
 			free_dp(tokens); }
 		else if (strcmp(tokens[0], "nop") == 0)
 		{
-			free_dp(tokens); continue; }
+			free_dp(tokens); 
+			continue; }
 		else
 		{
 			exit_sta = choose_func(tokens, &stack, line_number);
@@ -44,7 +45,6 @@ int main(int argc, char *argv[])
 	while (stack)
 	{
 		tmp = stack->next;
-		free(stack);
-		stack = tmp; }
+		free(stack), stack = tmp; }
 	free(buf), fclose(fp);
 	return (exit_sta); }
