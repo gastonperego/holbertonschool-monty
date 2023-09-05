@@ -8,8 +8,8 @@ int main(int argc, char *argv[])
     int exit_sta = EXIT_SUCCESS;
     FILE *fp = NULL;
     size_t n = 0;
-    char *buf = NULL, **tokens;
-    stack_t *stack;
+    char *buf = NULL, **tokens = NULL;
+    stack_t *stack = NULL;
 
     if (argc != 2)
     {
@@ -94,7 +94,7 @@ int choose_func(char **tokens, stack_t **stack, unsigned int line_number)
 
 char **tokenizer(char *input, char *delim)
 {
-    char *input_copy, *token, **av;
+    char *input_copy = NULL, *token = NULL, **av = NULL;
     int count = 0, i = 0;
 
     input_copy = strdup(input);

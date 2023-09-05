@@ -4,7 +4,7 @@
 */
 void push_func(char **tokens, stack_t **stack, unsigned int line_number __attribute__((unused)))
 {
-    stack_t *newnode;
+    stack_t *newnode = NULL;
     int i;
 
     newnode = malloc(sizeof(stack_t));
