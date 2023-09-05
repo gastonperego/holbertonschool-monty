@@ -19,15 +19,13 @@ int choose_func(char **tokens, stack_t **stack, unsigned int line_number)
 		{"add", add_func},
 		{NULL, NULL},
 	};
-
 	for (; i < 5; i++)
 	{
-
-			if (strcmp(func_selector[i].opcode, tokens[0]) == 0)
-			{
-				func_selector[i].f(stack, line_number);
-				return (EXIT_SUCCESS);
-			}
+		if (strcmp(func_selector[i].opcode, tokens[0]) == 0)
+		{
+			func_selector[i].f(stack, line_number);
+			return (EXIT_SUCCESS);
+		}
 	}
 	free_stack(stack);
 	fprintf(stderr, "L%i: unknown instruction %s\n", line_number, tokens[0]);

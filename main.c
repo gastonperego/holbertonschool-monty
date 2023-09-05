@@ -48,4 +48,5 @@ int main(int argc, char *argv[])
 		free(stack);
 		stack = tmp; }
 	free(buf), fclose(fp);
-	return (exit_sta); }
+	return (exit_sta);
+}
