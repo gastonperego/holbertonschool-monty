@@ -9,12 +9,11 @@
 */
 int main(int argc, char *argv[])
 {
-	unsigned int line_number = 0;
-	int exit_sta = EXIT_SUCCESS;
+	unsigned int line_number = 0, exit_sta = EXIT_SUCCESS;
 	FILE *fp = NULL;
 	size_t n = 0;
 	char *buf = NULL, **tokens = NULL;
-	stack_t *stack = NULL, tmp = NULL;
+	stack_t *stack = NULL, *tmp = NULL;
 
 	if (argc != 2)
 	{
@@ -37,7 +36,8 @@ int main(int argc, char *argv[])
 				free_dp(tokens); }
 		else if (strcmp(tokens[0], "nop") == 0)
 		{
-			free_dp(tokens), continue; }
+			free_dp(tokens); 
+			continue; }
 		else
 		{
 			exit_sta = choose_func(tokens, &stack, line_number);
