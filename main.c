@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
 			free_dp(tokens); }
 		else if (strcmp(tokens[0], "nop") == 0)
 		{
-			free_dp(tokens); 
+			free_dp(tokens);
 			continue; }
 		else
 		{
