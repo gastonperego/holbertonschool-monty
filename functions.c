@@ -97,13 +97,13 @@ void pop_func(stack_t **stack, unsigned int line_number)
 /**
 *
 */
-void swap_func(stack_t **stack, unsigned int line_number __attribute__((unused)))
+void swap_func(stack_t **stack, unsigned int line_number)
 {
     stack_t *aux = malloc(sizeof(stack_t));
 
     if (!(*stack) || !(*stack)->next)
     {
-        dprintf(STDERR_FILENO, "too short\n");
+        dprintf(STDERR_FILENO, "L%d: can't swap, stack too short\n", line_number);
         exit(EXIT_FAILURE);
     }
     else
@@ -119,15 +119,16 @@ void swap_func(stack_t **stack, unsigned int line_number __attribute__((unused))
 */
 void add_func(stack_t **stack, unsigned int line_number)
 {
-    stack_t *tmp = (*stack)->next; 
+    stack_t *tmp =  NULL; 
     
-    if ((*stack) == NULL || (*stack)->next == NULL)
+    if (!(*stack) || !(*stack)->next)
     {
         dprintf(STDERR_FILENO, "L%u: can't add, stack too short\n", line_number);
         exit(EXIT_FAILURE);
     }
     else
     {
+        tmp = (*stack)->next;
         tmp->n = (((*stack)->n + (*stack)->next->n));
         free(*stack);
         *stack = tmp;
