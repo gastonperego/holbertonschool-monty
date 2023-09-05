@@ -44,6 +44,13 @@ int main(int argc, char *argv[])
             free_dp(tokens);
         }
     }
+    while (stack)
+    {
+        stack_t *tmp = stack->next;
+
+        free(stack);
+        stack = tmp;
+    }
     free(buf);
     fclose(fp);
     return(exit_sta);
@@ -63,10 +70,13 @@ int choose_func(char **tokens, stack_t **stack, unsigned int line_number)
         {NULL, NULL},
     };
 
-    for (;i < 6 && strcmp(tokens[0],func_selector[i].opcode) == 0; i++)
+    for (;i < 6; i++)
     {
+        if (strcmp(tokens[0], func_selector[i].opcode) == 0)
+        {
             func_selector[i].f(stack, line_number);
             return(EXIT_SUCCESS);
+        }
     }
     free_stack(stack);
 	fprintf(stderr, "L%i: unknown instruction %s\n", line_number, tokens[0]);

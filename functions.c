@@ -5,7 +5,6 @@
 void push_func(char **tokens, stack_t **stack, unsigned int line_number __attribute__((unused)))
 {
     stack_t *newnode;
-    stack_t *same = *stack;
     int i;
 
     newnode = malloc(sizeof(stack_t));
@@ -20,29 +19,31 @@ void push_func(char **tokens, stack_t **stack, unsigned int line_number __attrib
 	    {
 		    if (!isdigit(tokens[1][i]) && tokens[1][i] != '-')
 		    {
+                free(newnode);
+                free_dp(tokens);
 			    fprintf(stderr, "L%u: usage: push integer\n", line_number);
 			    exit(EXIT_FAILURE);
 		    }
 	    }
         newnode->n = atoi(tokens[1]);
         newnode->prev = NULL;
-        if (!same)
+        if (!(*stack))
         {
             newnode->next = NULL;
         }
         else
         {
-            newnode->next = same;    
+            newnode->next = (*stack);    
         }
         *stack = newnode;
     }
     else
     {
         free(newnode);
+        free_dp(tokens);
         fprintf(stderr, "L%u: usage: push integer\n", line_number);
 		exit(EXIT_FAILURE);
     }
-    /*free(newnode);*/
 }
 
 /**
@@ -64,8 +65,6 @@ void pall_func(stack_t **stack, unsigned int line_number __attribute__((unused))
 */
 void pint_func(stack_t **stack, unsigned int line_number)
 {
-    stack_t *same = *stack;
-
     if (!*stack)
     {
         dprintf(STDERR_FILENO, "L%u: can't pint, stack empty\n", line_number);
@@ -73,7 +72,7 @@ void pint_func(stack_t **stack, unsigned int line_number)
     }
     else
     {
-        printf("%d\n", same->n);
+        printf("%d\n", (*stack)->n);
     }
 }
 /**
@@ -82,19 +81,16 @@ void pint_func(stack_t **stack, unsigned int line_number)
 void pop_func(stack_t **stack, unsigned int line_number)
 {
     stack_t *aux = NULL;
-    stack_t *same = *stack;
 
-    if (!same)
+    if (!(*stack))
     {
         dprintf(STDERR_FILENO ,"L%u: can't pop an empty stack\n", line_number);
         exit(EXIT_FAILURE);
     }
     else
     {
-        aux = same->next;
-        free(same->prev);
-        free(same->next);
-        same = aux;
+        aux = (*stack)->next;
+        (*stack) = aux;
         free(aux);
     }
 }
@@ -104,18 +100,17 @@ void pop_func(stack_t **stack, unsigned int line_number)
 void swap_func(stack_t **stack, unsigned int line_number __attribute__((unused)))
 {
     stack_t *aux = malloc(sizeof(stack_t));
-    stack_t *same = *stack;
 
-    if (!same || !same->next)
+    if (!(*stack) || !(*stack)->next)
     {
         dprintf(STDERR_FILENO, "too short\n");
         exit(EXIT_FAILURE);
     }
     else
     {
-        aux->n = same->n;
-        same->n = same->next->n;
-        same->next->n = aux->n;
+        aux->n = (*stack)->n;
+        (*stack)->n = (*stack)->next->n;
+        (*stack)->next->n = aux->n;
         free(aux);
     }
 }
@@ -124,21 +119,21 @@ void swap_func(stack_t **stack, unsigned int line_number __attribute__((unused))
 */
 void add_func(stack_t **stack, unsigned int line_number)
 {
-    stack_t *same = *stack;
     stack_t *aux = malloc(sizeof(stack_t));
     
-    
-    if (same == NULL || same->next == NULL)
+    if ((*stack) == NULL || (*stack)->next == NULL)
     {
+        free(aux);
         dprintf(STDERR_FILENO, "L%u: can't add, stack too short\n", line_number);
         exit(EXIT_FAILURE);
     }
     else
     {
         aux->prev = NULL;
-        aux->n = (same->n + same->next->n);
-        aux->next = same->next->next;
+        aux->n = ((*stack)->n + (*stack)->next->n);
+        aux->next = (*stack)->next->next;
+        free((*stack));
+        free((*stack)->next);
         *stack = aux;
-        free(aux);
     }
 }
