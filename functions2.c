@@ -19,13 +19,13 @@ int choose_func(char **tokens, stack_t **stack, unsigned int line_number)
 		{NULL, NULL},
 	};
 
-	for (;i < 5; i++)
+	for (; i < 5; i++)
 	{
-		
+
 			if (strcmp(func_selector[i].opcode, tokens[0]) == 0)
 			{
 				func_selector[i].f(stack, line_number);
-				return(EXIT_SUCCESS);
+				return (EXIT_SUCCESS);
 			}
 	}
 	free_stack(stack);
@@ -33,7 +33,7 @@ int choose_func(char **tokens, stack_t **stack, unsigned int line_number)
 	return (EXIT_FAILURE);
 }
 
-/*
+/**
 * tokenizer - makes tokens from the input string
 *
 * @input: input string from getline
@@ -53,7 +53,6 @@ char **tokenizer(char *input, char *delim)
 		free(input_copy);
 		exit(-1);
 	}
-
 	token = strtok(input_copy, delim);
 	while (token != NULL)
 	{
@@ -71,7 +70,6 @@ char **tokenizer(char *input, char *delim)
 		free_dp(av);
 		exit(-1);
 	}
- 
 	token = strtok(input, delim);
 	while (token != NULL)
 	{
@@ -84,18 +82,23 @@ char **tokenizer(char *input, char *delim)
 			exit(-1);
 		}
 		token = strtok(NULL, delim);
-		i++;
-	}
+		i++; }
 	av[i] = NULL;
-	return (av);    
-}
-
+	return (av); }
+/**
+ * free_dp - frees a double pointer
+ *
+ * @command: double pointer to be freed
+ *
+ * Return: void
+ */
 void free_dp(char **command)
 {
 	size_t i = 0;
+
 	if (command == NULL)
 		return;
-		
+
 	while (command[i])
 	{
 	free(command[i]);
@@ -106,6 +109,13 @@ void free_dp(char **command)
 		free(command[i]);
 	free(command);
 }
+/**
+ * free_stack - frees a stack
+ *
+ * @stack: stack to be freed
+ *
+ * Return: void
+ */
 void free_stack(stack_t **stack)
 {
 	stack_t *aux = *stack;
@@ -121,15 +131,15 @@ void free_stack(stack_t **stack)
 }
 /**
  * del_only - checks if the line only contains delimiters.
- * 
+ *
  * @line: the pointer to the line.
- * @delims: string with delimiter characters.
- * 
+ *
  * Return: 1 if the line only contains delimiters, otherwise 0.
  */
 int del_only(char *line)
 {
 	int i = 0, j = 0, k = 0, l = 0, m = 0;
+
 	while (line[i])
 	{
 		if (line[i] == ' ')
@@ -144,7 +154,7 @@ int del_only(char *line)
 	}
 	if ((strlen(line) - (j + k + l + m)) == 0)
 	{
-		return('\0');
+		return ('\0');
 	}
 	return (1);
 }
@@ -158,7 +168,7 @@ int del_only(char *line)
 *
 * Return: void
 */
-void push_func(char **tokens, stack_t **stack, unsigned int line_number __attribute__((unused)))
+void push_func(char **tokens, stack_t **stack, unsigned int line_number)
 {
 	stack_t *newnode = NULL;
 	int i;
@@ -189,7 +199,7 @@ void push_func(char **tokens, stack_t **stack, unsigned int line_number __attrib
 		}
 		else
 		{
-			newnode->next = (*stack);    
+			newnode->next = (*stack);
 		}
 		*stack = newnode;
 	}

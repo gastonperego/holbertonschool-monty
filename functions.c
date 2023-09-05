@@ -4,18 +4,18 @@
 * pall_func - prints the value of each node, starting for the top of the stack
 *
 * @stack: double pointer to the first node of the stack
-* @line_number: number of the line of command
+* @line: number of the line of command
 *
 * Return: void
 */
-void pall_func(stack_t **stack, unsigned int line_number __attribute__((unused)))
+void pall_func(stack_t **stack, unsigned int line __attribute__((unused)))
 {
 	stack_t *tmp = *stack;
 
 	while (tmp)
 	{
 		printf("%d\n", tmp->n);
-		tmp = tmp->next;    
+		tmp = tmp->next;
 	}
 }
 /**
@@ -31,7 +31,7 @@ void pint_func(stack_t **stack, unsigned int line_number)
 	if (!*stack)
 	{
 		dprintf(STDERR_FILENO, "L%u: can't pint, stack empty\n", line_number);
-		exit(EXIT_FAILURE);    
+		exit(EXIT_FAILURE);
 	}
 	else
 	{
@@ -52,7 +52,7 @@ void pop_func(stack_t **stack, unsigned int line_number)
 
 	if (!(*stack))
 	{
-		dprintf(STDERR_FILENO ,"L%u: can't pop an empty stack\n", line_number);
+		dprintf(STDERR_FILENO, "L%u: can't pop an empty stack\n", line_number);
 		exit(EXIT_FAILURE);
 	}
 	else
@@ -97,8 +97,8 @@ void swap_func(stack_t **stack, unsigned int line_number)
 */
 void add_func(stack_t **stack, unsigned int line_number)
 {
-	stack_t *tmp =  NULL; 
-	
+	stack_t *tmp =  NULL;
+
 	if (!(*stack) || !(*stack)->next)
 	{
 		dprintf(STDERR_FILENO, "L%u: can't add, stack too short\n", line_number);
