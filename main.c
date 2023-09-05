@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE); }
 	fp = fopen(argv[1], "r");
 	if (fp == NULL)
-	{
+		{
 		dprintf(STDERR_FILENO, "Error: Can't open file %s\n", argv[1]);
 		exit(EXIT_FAILURE); }
 	while (getline(&buf, &n, fp) != -1)
@@ -32,11 +32,11 @@ int main(int argc, char *argv[])
 		tokens = tokenizer(buf, " \n\t$");
 		if (strcmp(tokens[0], "push") == 0)
 		{
-				push_func(tokens, &stack, line_number);
-				free_dp(tokens); }
+			push_func(tokens, &stack, line_number);
+			free_dp(tokens); }
 		else if (strcmp(tokens[0], "nop") == 0)
 		{
-			free_dp(tokens); 
+			free_dp(tokens);
 			continue; }
 		else
 		{
