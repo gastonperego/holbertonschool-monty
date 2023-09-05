@@ -72,10 +72,13 @@ int choose_func(char **tokens, stack_t **stack, unsigned int line_number)
 
     for (;i < 6; i++)
     {
-        if (strcmp(tokens[0], func_selector[i].opcode) == 0)
+        if (strlen(tokens[0]) <= 4)
         {
-            func_selector[i].f(stack, line_number);
-            return(EXIT_SUCCESS);
+            if (strcmp(tokens[0], func_selector[i].opcode) == 0)
+            {
+                func_selector[i].f(stack, line_number);
+                return(EXIT_SUCCESS);
+            }
         }
     }
     free_stack(stack);

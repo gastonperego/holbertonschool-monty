@@ -119,21 +119,17 @@ void swap_func(stack_t **stack, unsigned int line_number __attribute__((unused))
 */
 void add_func(stack_t **stack, unsigned int line_number)
 {
-    stack_t *aux = malloc(sizeof(stack_t));
+    stack_t *tmp = (*stack)->next; 
     
     if ((*stack) == NULL || (*stack)->next == NULL)
     {
-        free(aux);
         dprintf(STDERR_FILENO, "L%u: can't add, stack too short\n", line_number);
         exit(EXIT_FAILURE);
     }
     else
     {
-        aux->prev = NULL;
-        aux->n = ((*stack)->n + (*stack)->next->n);
-        aux->next = (*stack)->next->next;
-        free((*stack));
-        free((*stack)->next);
-        *stack = aux;
+        tmp->n = (((*stack)->n + (*stack)->next->n));
+        free(*stack);
+        *stack = tmp;
     }
 }
